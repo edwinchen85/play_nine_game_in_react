@@ -1,3 +1,4 @@
+import fontAwesome from '../node_modules/font-awesome/scss/font-awesome.scss';
 import css from './scss/app.scss';
 
 import { AppContainer } from 'react-hot-loader';
