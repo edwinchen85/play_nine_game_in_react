@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import { possibleCombinationSum } from './possibleCombinationSum';
 
 const Stars = (props) => {
   return (
@@ -102,20 +103,28 @@ const DoneFrame = (props) => {
   return (
     <div className="text-center">
       <h2>{props.doneStatus}</h2>
+      <button
+        className="btn-again"
+        onClick={props.resetGame}
+      >Play Again</button>
     </div>
   );
 }
 
 class Game extends React.Component {
   static randomNumber = () => 1 + Math.floor(Math.random() * 9);
-  state = {
+  static initialState = () => ({
     selectedNumbers: [],
     randomNumberOfStars: Game.randomNumber(),
     usedNumbers: [],
     answerIsCorrect: null,
     redraws: 5,
     doneStatus: null
-  };
+  });
+
+  state = Game.initialState();
+
+  resetGame = () => this.setState(Game.initialState());
 
   selectNumber = (clickedNumber) => {
     if (this.state.selectedNumbers.indexOf(clickedNumber) >= 0) { return; }
@@ -145,7 +154,7 @@ class Game extends React.Component {
       selectedNumbers: [],
       answerIsCorrect: null,
       randomNumberOfStars: Game.randomNumber()
-    }));
+    }), this.updateDoneStatus);
   };
 
   redraw = () => {
@@ -155,7 +164,24 @@ class Game extends React.Component {
       answerIsCorrect: null,
       selectedNumbers: [],
       redraws: prevState.redraws - 1
-    }));
+    }), this.updateDoneStatus);
+  };
+
+  possibleSolution = ({randomNumberOfStars, usedNumbers}) => {
+    const possibleNumbers = _.range(1, 10).filter(number => usedNumbers.indexOf(number) === -1);
+
+    return possibleCombinationSum(possibleNumbers, randomNumberOfStars);
+  };
+
+  updateDoneStatus = () => {
+    this.setState(prevState => {
+      if (prevState.usedNumbers.length === 9) {
+        return { doneStatus: 'Done. Nice!' };
+      }
+      if (prevState.redraws === 0 && !this.possibleSolution(prevState)) {
+        return { doneStatus: 'Game Over!' };
+      }
+    });
   };
 
   render() {
@@ -183,7 +209,10 @@ class Game extends React.Component {
         <br />
         {
           doneStatus ?
-          <DoneFrame doneStatus={doneStatus} />
+          <DoneFrame
+            doneStatus={doneStatus}
+            resetGame={this.resetGame}
+          />
           :
           <Numbers
             selectedNumbers={selectedNumbers}
@@ -197,12 +226,6 @@ class Game extends React.Component {
 }
 
 class App extends React.Component {
-
-  // constructor(props){
-    // super(props);
-
-
-  // }
 
   render() {
     return (
