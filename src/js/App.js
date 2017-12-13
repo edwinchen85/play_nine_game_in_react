@@ -20,7 +20,10 @@ const Button = (props) => {
   switch (props.answerIsCorrect) {
     case true:
       button =
-      <button className="btn-equal btn-success">
+      <button
+        className="btn-equal btn-success"
+        onClick={props.acceptAnswer}
+      >
         <i className="fa fa-check"></i>
       </button>
       break;
@@ -65,6 +68,9 @@ const Answer = (props) => {
 
 const Numbers = (props) => {
   const numberClassName = (number) => {
+    if (props.usedNumbers.indexOf(number) >= 0) {
+      return 'used';
+    }
     if (props.selectedNumbers.indexOf(number) >= 0) {
       return 'selected';
     }
@@ -89,6 +95,7 @@ class Game extends React.Component {
   state = {
     selectedNumbers: [],
     numberOfStars: 1 + Math.floor(Math.random() * 9),
+    usedNumbers: [],
     answerIsCorrect: null
   };
 
@@ -114,8 +121,17 @@ class Game extends React.Component {
     }));
   };
 
+  acceptAnswer = () => {
+    this.setState(prevState => ({
+      usedNumbers: prevState.usedNumbers.concat(prevState.selectedNumbers),
+      selectedNumbers: [],
+      answerIsCorrect: null,
+      numberOfStars: 1 + Math.floor(Math.random() * 9)
+    }));
+  };
+
   render() {
-    const { selectedNumbers, numberOfStars, answerIsCorrect } = this.state;
+    const { selectedNumbers, numberOfStars, answerIsCorrect, usedNumbers } = this.state;
     return (
       <div className="container">
         <h3>Play Nine</h3>
@@ -126,6 +142,7 @@ class Game extends React.Component {
             selectedNumbers={selectedNumbers}
             checkAnswer={this.checkAnswer}
             answerIsCorrect={answerIsCorrect}
+            acceptAnswer={this.acceptAnswer}
           />
           <Answer
             selectedNumbers={selectedNumbers}
@@ -136,6 +153,7 @@ class Game extends React.Component {
         <Numbers
           selectedNumbers={selectedNumbers}
           selectNumber={this.selectNumber}
+          usedNumbers={usedNumbers}
         />
       </div>
     );
