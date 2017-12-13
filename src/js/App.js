@@ -43,10 +43,12 @@ const Button = (props) => {
       break;
   }
   return (
-    <div className="col-sm-2">
+    <div className="col-sm-2 text-center">
       {button}
+      <br />
+      <br />
       <button
-        className="btn-warning btn-refresh"
+        className="btn-warning"
         onClick={props.redraw}
         disabled={props.redraws === 0}
       >
@@ -96,6 +98,14 @@ const Numbers = (props) => {
 }
 Numbers.list = _.range(1, 10);
 
+const DoneFrame = (props) => {
+  return (
+    <div className="text-center">
+      <h2>{props.doneStatus}</h2>
+    </div>
+  );
+}
+
 class Game extends React.Component {
   static randomNumber = () => 1 + Math.floor(Math.random() * 9);
   state = {
@@ -103,7 +113,8 @@ class Game extends React.Component {
     randomNumberOfStars: Game.randomNumber(),
     usedNumbers: [],
     answerIsCorrect: null,
-    redraws: 5
+    redraws: 5,
+    doneStatus: null
   };
 
   selectNumber = (clickedNumber) => {
@@ -148,7 +159,7 @@ class Game extends React.Component {
   };
 
   render() {
-    const { selectedNumbers, randomNumberOfStars, answerIsCorrect, usedNumbers, redraws } = this.state;
+    const { selectedNumbers, randomNumberOfStars, answerIsCorrect, usedNumbers, redraws, doneStatus } = this.state;
     return (
       <div className="container">
         <h3>Play Nine</h3>
@@ -169,11 +180,17 @@ class Game extends React.Component {
           />
         </div>
         <br />
-        <Numbers
-          selectedNumbers={selectedNumbers}
-          selectNumber={this.selectNumber}
-          usedNumbers={usedNumbers}
-        />
+        <br />
+        {
+          doneStatus ?
+          <DoneFrame doneStatus={doneStatus} />
+          :
+          <Numbers
+            selectedNumbers={selectedNumbers}
+            selectNumber={this.selectNumber}
+            usedNumbers={usedNumbers}
+          />
+        }
       </div>
     );
   }
