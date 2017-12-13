@@ -2,24 +2,39 @@ import React from 'react';
 
 const Stars = (props) => {
   return (
-    <div>
-      ...
+    <div className="col-sm-5">
+      <i className="fa fa-star"></i>
+      <i className="fa fa-star"></i>
+      <i className="fa fa-star"></i>
+      <i className="fa fa-star"></i>
     </div>
   );
 }
 
 const Button = (props) => {
   return (
-    <div>
-      ...
+    <div className="col-sm-2">
+      <button>=</button>
     </div>
   );
 }
 
 const Answer = (props) => {
   return (
-    <div>
+    <div className="col-sm-5">
       ...
+    </div>
+  );
+}
+
+const Numbers = (props) => {
+  return (
+    <div className="panel text-center">
+      <div>
+        <span>1</span>
+        <span className="selected">2</span>
+        <span className="used">3</span>
+      </div>
     </div>
   );
 }
@@ -27,11 +42,16 @@ const Answer = (props) => {
 class Game extends React.Component {
   render() {
     return (
-      <div>
+      <div className="container">
         <h3>Play Nine</h3>
-        <Stars />
-        <Button />
-        <Answer />
+        <hr />
+        <div className="row">
+          <Stars />
+          <Button />
+          <Answer />
+        </div>
+        <br />
+        <Numbers />
       </div>
     );
   }
