@@ -4,7 +4,7 @@ import { possibleCombinationSum } from './possibleCombinationSum';
 
 const Stars = (props) => {
   return (
-    <div className="col-sm-5">
+    <div className="col-xs-5">
       {
         _.range(props.numberOfStars).map(i => (
           <i key={i} className="fa fa-star"></i>
@@ -44,7 +44,7 @@ const Button = (props) => {
       break;
   }
   return (
-    <div className="col-sm-2 text-center">
+    <div className="col-xs-2 text-center">
       {button}
       <br />
       <br />
@@ -61,7 +61,7 @@ const Button = (props) => {
 
 const Answer = (props) => {
   return (
-    <div className="col-sm-5">
+    <div className="col-xs-5">
       {
         props.selectedNumbers.map((number, i) => (
           <span
@@ -188,7 +188,7 @@ class Game extends React.Component {
     const { selectedNumbers, randomNumberOfStars, answerIsCorrect, usedNumbers, redraws, doneStatus } = this.state;
     return (
       <div className="container">
-        <h3>Play Nine</h3>
+        <h3 className="text-center">Play Nine</h3>
         <hr />
         <div className="row">
           <Stars numberOfStars={randomNumberOfStars} />
