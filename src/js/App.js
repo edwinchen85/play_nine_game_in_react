@@ -2,12 +2,12 @@ import React from 'react';
 import _ from 'lodash';
 
 const Stars = (props) => {
-  const numberOfStars = 1 + Math.floor(Math.random() * 9);
+  // const numberOfStars = 1 + Math.floor(Math.random() * 9);
 
   return (
     <div className="col-sm-5">
       {
-        _.range(numberOfStars).map(i => (
+        _.range(props.numberOfStars).map(i => (
           <i key={i} className="fa fa-star"></i>
         ))
       }
@@ -45,7 +45,11 @@ const Numbers = (props) => {
     <div className="panel text-center">
       <div>
         {
-          Numbers.list.map((number, i) => <span key={i} className={numberClassName(number)}>{number}</span>)
+          Numbers.list.map((number, i) => <span
+            key={i}
+            className={numberClassName(number)}
+            onClick={() => props.selectNumber(number)}
+          >{number}</span>)
         }
       </div>
     </div>
@@ -55,7 +59,15 @@ Numbers.list = _.range(1, 10);
 
 class Game extends React.Component {
   state = {
-    selectedNumbers: [2, 4]
+    selectedNumbers: [],
+    numberOfStars: 1 + Math.floor(Math.random() * 9)
+  };
+
+  selectNumber = (clickedNumber) => {
+    if (this.state.selectedNumbers.indexOf(clickedNumber) >= 0) { return; }
+    this.setState((prevState) => ({
+      selectedNumbers: prevState.selectedNumbers.concat(clickedNumber)
+    }))
   };
 
   render() {
@@ -64,12 +76,15 @@ class Game extends React.Component {
         <h3>Play Nine</h3>
         <hr />
         <div className="row">
-          <Stars />
+          <Stars numberOfStars={this.state.numberOfStars} />
           <Button />
           <Answer selectedNumbers={this.state.selectedNumbers} />
         </div>
         <br />
-        <Numbers selectedNumbers={this.state.selectedNumbers} />
+        <Numbers
+          selectedNumbers={this.state.selectedNumbers}
+          selectNumber={this.selectNumber}
+        />
       </div>
     );
   }
@@ -77,11 +92,11 @@ class Game extends React.Component {
 
 class App extends React.Component {
 
-  constructor(props){
-    super(props);
+  // constructor(props){
+    // super(props);
 
 
-  }
+  // }
 
   render() {
     return (
